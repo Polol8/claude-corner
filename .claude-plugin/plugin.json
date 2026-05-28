@@ -16,9 +16,9 @@
     "corner"
   ],
   "commands": [
-    "./.claude/commands/setup",
-    "./.claude/commands/now",
-    "./.claude/commands/status",
-    "./.claude/commands/uninstall"
+    "./.claude/commands/setup.md",
+    "./.claude/commands/now.md",
+    "./.claude/commands/status.md",
+    "./.claude/commands/uninstall.md"
   ]
 }
