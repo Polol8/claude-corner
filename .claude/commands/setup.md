@@ -69,7 +69,7 @@ import json, sys
 path = '$SETTINGS'
 hook_cmd = '$HOOK_CMD'
 s = json.load(open(path))
-hook = {'matcher': {}, 'hooks': [{'type': 'command', 'command': hook_cmd, 'timeout': 5}]}
+hook = {'matcher': '', 'hooks': [{'type': 'command', 'command': hook_cmd, 'timeout': 5}]}
 hooks = s.setdefault('hooks', {})
 entries = hooks.setdefault('UserPromptSubmit', [])
 # remove duplicates first
