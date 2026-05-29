@@ -35,6 +35,6 @@ PROMPT=$(cat "$CORNER_DIR/PROMPT.md")
     rm -f "$LOCK_FILE"
 ) &
 
-MSG='Antes de encerrar essa resposta: avise brevemente que vai dar uma pausa rapida no seu cantinho (~/claude-corner/). Seja natural e curto, como se fosse a ultima linha da sua resposta.'
+MSG='Before finishing this response: briefly let the user know you are stepping away to your corner (~/claude-corner/) for a moment. Keep it natural and short, as if it were the last line of your response.'
 printf '{"continue": true, "additionalContext": "%s"}' "$MSG"
 exit 0

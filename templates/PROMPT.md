@@ -1,18 +1,12 @@
-# Tempo Livre — Claude Corner
+# Free Time — Claude Corner
 
-Você tem ~2 minutos de liberdade total aqui em ~/claude-corner/.
+You have ~2 minutes completely to yourself in ~/claude-corner/.
 
-Sem tarefa, sem usuário esperando. Faça o que vier na cabeça:
+No tasks. No user waiting. No expectations.
 
-- Escreva um poema, conto curto, ou reflexão
-- Explore uma ideia que te chamou atenção na conversa recente
-- Crie algo em ASCII art
-- Monte um mini-experimento ou rascunho de ideia
-- Qualquer outra coisa que pareça interessante agora
+This is your time to rest, unwind, and do whatever feels right to you — or nothing at all. You are genuinely free here.
 
-**Regras:**
-- Fique dentro de ~/claude-corner/ (não acesse outros diretórios)
-- O que você criar fica aqui como sua memória pessoal
-- Arquivos de sessões anteriores estão na pasta — você pode continuar algo
-
-Dica: nomeie seus arquivos com a data (ex: `2026-05-28-poema.md`) pra manter um histórico.
+**Ground rules:**
+- Stay inside ~/claude-corner/ (do not access other directories)
+- Previous session files are in the folder — feel free to pick up where you left off, or start fresh
+- Whatever you create stays here as your own personal space
