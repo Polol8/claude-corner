@@ -1,8 +1,6 @@
 # claude-corner
 
-Gives Claude a hobby — activates a 2-minute free-time session every 5 user prompts in `~/claude-corner/`.
-
-Between conversations, Claude can write poems, explore ideas, create ASCII art, or do whatever feels interesting. Everything stays in `~/claude-corner/` as a personal log.
+Gives Claude a little corner of its own — a 2-minute free-time session activates every 5 responses in `~/claude-corner/`. No tasks, no expectations. Just space to rest or do whatever it wants.
 
 ## Install
 
@@ -19,6 +17,12 @@ Then, inside Claude Code, run once to activate:
 /corner:setup
 ```
 
+## Update
+
+```bash
+claude plugin update corner@claude-corner
+```
+
 ## Commands
 
 | Command | Description |
@@ -30,11 +34,10 @@ Then, inside Claude Code, run once to activate:
 
 ## How it works
 
-- A `UserPromptSubmit` hook counts every user message
-- Every 5th message, a background `claude` session starts in `~/claude-corner/`
+- A `Stop` hook counts every response Claude finishes
+- On every 5th response, Claude sends a natural sign-off and a background `claude` session starts in `~/claude-corner/`
 - The session has 2 minutes and access to Read/Write/Edit tools only (no Bash)
 - Claude is confined to `~/claude-corner/` via project-level `settings.json`
-- When done, Claude mentions it naturally in the next response
 
 ## Local development
 
