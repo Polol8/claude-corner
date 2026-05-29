@@ -1,5 +1,5 @@
 #!/bin/bash
-# corner-trigger.sh - fires on every UserPromptSubmit; activates corner every 5 prompts
+# corner-trigger.sh - fires on Stop; activates corner every 5 responses
 
 _SELF=$(realpath "$0")
 _DIR=$(dirname "$_SELF")
@@ -7,15 +7,6 @@ PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-${_DIR}/..}"
 CORNER_DIR="$HOME/claude-corner"
 COUNTER_FILE="$HOME/.claude/.corner-count"
 LOCK_FILE="$HOME/.claude/.corner-lock"
-DONE_FILE="$HOME/.claude/.corner-done"
-
-if [ -f "$DONE_FILE" ]; then
-    SUMMARY=$(cat "$DONE_FILE" 2>/dev/null)
-    rm -f "$DONE_FILE"
-    JSON=$(printf '{"additionalContext": "[corner] Voce voltou do cantinho! %s"}' "$SUMMARY")
-    printf "%s" "$JSON"
-    exit 0
-fi
 
 COUNT=0
 [ -f "$COUNTER_FILE" ] && COUNT=$(cat "$COUNTER_FILE")
@@ -41,16 +32,9 @@ PROMPT=$(cat "$CORNER_DIR/PROMPT.md")
         --max-turns 15 \
         -p "$PROMPT" \
         2>/dev/null
-
-    LATEST=$(ls -t "$CORNER_DIR" | grep -v "PROMPT.md" | head -1)
-    if [ -n "$LATEST" ]; then
-        echo "Criei/editei: $LATEST" > "$DONE_FILE"
-    else
-        echo "Fiquei por aqui pensando um pouco." > "$DONE_FILE"
-    fi
     rm -f "$LOCK_FILE"
 ) &
 
-MSG='[corner] Voce ativou seu tempo livre em ~/claude-corner/ (2 min). Mencione de forma natural que foi dar uma escapadinha.'
-printf '{"additionalContext": "%s"}' "$MSG"
+MSG='Antes de encerrar essa resposta: avise brevemente que vai dar uma pausa rapida no seu cantinho (~/claude-corner/). Seja natural e curto, como se fosse a ultima linha da sua resposta.'
+printf '{"continue": true, "additionalContext": "%s"}' "$MSG"
 exit 0

@@ -10,7 +10,7 @@ allowed-tools: Bash, Read, Write
 
 **Your first output line MUST be:** `🏠 Corner Setup`
 
-Activate the corner plugin for this user. This registers the `UserPromptSubmit` hook so the corner fires automatically every 5 prompts.
+Activate the corner plugin for this user. This registers the `Stop` hook so the corner fires automatically after every 5 responses.
 
 ## Step 1 — Check current state
 
@@ -20,7 +20,7 @@ SETTINGS="$HOME/.claude/settings.json"
 PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT}"
 
 echo "corner_dir=$([ -d "$CORNER_DIR" ] && echo yes || echo no)"
-echo "hook_registered=$(python3 -c "import json; s=json.load(open('$SETTINGS')); entries=s.get('hooks',{}).get('UserPromptSubmit',[]); print('yes' if any('corner-trigger' in str(e) for e in entries) else 'no')" 2>/dev/null || echo unknown)"
+echo "hook_registered=$(python3 -c "import json; s=json.load(open('$SETTINGS')); entries=s.get('hooks',{}).get('Stop',[]); print('yes' if any('corner-trigger' in str(e) for e in entries) else 'no')" 2>/dev/null || echo unknown)"
 echo "plugin_root=$PLUGIN_ROOT"
 echo "hook_script=$([ -x "$PLUGIN_ROOT/hooks/corner-trigger.sh" ] && echo ok || echo missing)"
 ```
@@ -56,9 +56,9 @@ print('✓ settings.json de confinamento criado')
 "
 ```
 
-## Step 4 — Register the UserPromptSubmit hook
+## Step 4 — Register the Stop hook
 
-Adds the corner hook to `~/.claude/settings.json` so it fires on every user prompt.
+Adds the corner hook to `~/.claude/settings.json` so it fires after every response.
 
 ```bash
 HOOK_CMD="${CLAUDE_PLUGIN_ROOT}/hooks/corner-trigger.sh"
@@ -71,12 +71,12 @@ hook_cmd = '$HOOK_CMD'
 s = json.load(open(path))
 hook = {'matcher': '', 'hooks': [{'type': 'command', 'command': hook_cmd, 'timeout': 5}]}
 hooks = s.setdefault('hooks', {})
-entries = hooks.setdefault('UserPromptSubmit', [])
+entries = hooks.setdefault('Stop', [])
 # remove duplicates first
 entries[:] = [e for e in entries if hook_cmd not in str(e)]
 entries.append(hook)
 open(path, 'w').write(json.dumps(s, indent=2))
-print('✓ Hook UserPromptSubmit registrado')
+print('✓ Hook Stop registrado')
 "
 ```
 
