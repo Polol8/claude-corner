@@ -7,437 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;1,9..144,300;1,9..144,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg:           #191714;
-      --sidebar-bg:   #1E1C19;
-      --border:       #2E2B27;
-      --border-light: #252320;
-      --text-1:       #EDE8E1;
-      --text-2:       #8A8278;
-      --text-3:       #4E4A46;
-      --accent:       #D97757;
-      --accent-tint:  rgba(217, 119, 87, 0.10);
-    }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      display: flex;
-      height: 100vh;
-      font-family: 'DM Sans', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text-1);
-      overflow: hidden;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* ─── Sidebar ─────────────────────────────────────── */
-
-    #sidebar {
-      width: 260px;
-      min-width: 260px;
-      background: var(--sidebar-bg);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    #sidebar-header {
-      padding: 26px 20px 18px;
-      border-bottom: 1px solid var(--border-light);
-      flex-shrink: 0;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      margin-bottom: 5px;
-    }
-
-    .brand-mark {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background: var(--accent);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      font-family: 'Fraunces', Georgia, serif;
-      font-style: italic;
-      font-weight: 300;
-      font-size: 14px;
-      color: white;
-      line-height: 1;
-    }
-
-    .brand-name {
-      font-family: 'Fraunces', Georgia, serif;
-      font-style: italic;
-      font-weight: 300;
-      font-size: 16px;
-      color: var(--text-1);
-      letter-spacing: -0.2px;
-    }
-
-    #entry-count {
-      font-size: 11px;
-      font-weight: 300;
-      color: var(--text-3);
-      padding-left: 33px;
-    }
-
-    /* ─── Entry list ──────────────────────────────────── */
-
-    #sidebar-entries {
-      flex: 1;
-      overflow-y: auto;
-      padding: 6px 0 12px;
-    }
-
-    #sidebar-entries::-webkit-scrollbar { width: 3px; }
-    #sidebar-entries::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-    .category { padding: 14px 0 2px; }
-
-    .category-label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 0 20px 7px;
-      font-size: 9px;
-      font-weight: 500;
-      letter-spacing: 1.8px;
-      text-transform: uppercase;
-      color: var(--text-3);
-    }
-
-    .category-label::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border-light);
-    }
-
-    .entry {
-      padding: 8px 20px 8px 22px;
-      cursor: pointer;
-      border-left: 2px solid transparent;
-      transition: background 0.1s;
-    }
-
-    .entry:hover { background: var(--bg); }
-
-    .entry.active {
-      background: var(--accent-tint);
-      border-left-color: var(--accent);
-    }
-
-    .entry-title {
-      font-size: 12.5px;
-      font-weight: 400;
-      color: var(--text-2);
-      line-height: 1.35;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      transition: color 0.1s;
-    }
-
-    .entry:hover .entry-title,
-    .entry.active .entry-title { color: var(--text-1); }
-
-    .entry.active .entry-title { font-weight: 500; }
-
-    .entry-meta {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-top: 2px;
-    }
-
-    .entry-date {
-      font-size: 10px;
-      font-weight: 300;
-      color: var(--text-3);
-    }
-
-    .entry-ext {
-      font-family: 'SF Mono', 'Cascadia Code', monospace;
-      font-size: 9px;
-      color: var(--text-3);
-      background: var(--border-light);
-      padding: 1px 4px;
-      border-radius: 2px;
-      letter-spacing: 0.3px;
-    }
-
-    .no-entries {
-      padding: 20px;
-      font-size: 12px;
-      font-weight: 300;
-      color: var(--text-3);
-      line-height: 1.7;
-    }
-
-    /* ─── Footer ──────────────────────────────────────── */
-
-    #sidebar-footer {
-      flex-shrink: 0;
-      padding: 11px 20px;
-      border-top: 1px solid var(--border-light);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .footer-path {
-      font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', monospace;
-      font-size: 9px;
-      font-weight: 300;
-      color: var(--text-3);
-      letter-spacing: 0.2px;
-    }
-
-    .pulse {
-      width: 5px;
-      height: 5px;
-      border-radius: 50%;
-      background: var(--border);
-      transition: background 0.4s ease;
-    }
-
-    .pulse.on { background: var(--accent); }
-
-    /* ─── Content area ────────────────────────────────── */
-
-    #content {
-      flex: 1;
-      position: relative;
-      overflow: hidden;
-      background: var(--bg);
-    }
-
-    #page-frame {
-      display: none;
-      width: 100%;
-      height: 100%;
-      border: none;
-    }
-
-    #page-rendered {
-      display: none;
-      width: 100%;
-      height: 100%;
-      overflow-y: auto;
-      padding: 52px 64px;
-    }
-
-    #page-rendered::-webkit-scrollbar { width: 4px; }
-    #page-rendered::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-    #empty-state {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      pointer-events: none;
-    }
-
-    .empty-wordmark {
-      font-family: 'Fraunces', Georgia, serif;
-      font-style: italic;
-      font-weight: 300;
-      font-size: 52px;
-      color: var(--border);
-      letter-spacing: -1.5px;
-      line-height: 1;
-      user-select: none;
-    }
-
-    .empty-sub {
-      font-size: 12px;
-      font-weight: 300;
-      color: var(--text-3);
-      text-align: center;
-      line-height: 1.7;
-      max-width: 200px;
-    }
-
-    /* ─── Markdown body ───────────────────────────────── */
-
-    .md-body {
-      max-width: 680px;
-      margin: 0 auto;
-      font-size: 15px;
-      line-height: 1.78;
-      color: var(--text-1);
-    }
-
-    .md-body h1 {
-      font-family: 'Fraunces', Georgia, serif;
-      font-style: italic;
-      font-weight: 300;
-      font-size: 36px;
-      line-height: 1.2;
-      letter-spacing: -0.5px;
-      margin: 0 0 32px;
-    }
-
-    .md-body h2 {
-      font-family: 'Fraunces', Georgia, serif;
-      font-style: italic;
-      font-weight: 300;
-      font-size: 24px;
-      color: var(--text-1);
-      margin: 44px 0 16px;
-    }
-
-    .md-body h3 {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 1.6px;
-      text-transform: uppercase;
-      color: var(--text-2);
-      margin: 36px 0 14px;
-    }
-
-    .md-body h4, .md-body h5, .md-body h6 {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-2);
-      margin: 28px 0 10px;
-    }
-
-    .md-body p { margin: 0 0 20px; }
-
-    .md-body strong { font-weight: 500; color: var(--text-1); }
-
-    .md-body em { font-style: italic; color: var(--text-2); }
-
-    .md-body a { color: var(--accent); text-decoration: none; }
-    .md-body a:hover { text-decoration: underline; }
-
-    .md-body blockquote {
-      border-left: 2px solid var(--accent);
-      padding: 4px 0 4px 20px;
-      margin: 0 0 20px;
-      color: var(--text-2);
-      font-style: italic;
-    }
-
-    .md-body code {
-      font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', monospace;
-      font-size: 12.5px;
-      background: var(--sidebar-bg);
-      padding: 2px 6px;
-      border-radius: 3px;
-      color: var(--text-2);
-    }
-
-    .md-body pre {
-      background: var(--sidebar-bg);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 16px 20px;
-      overflow-x: auto;
-      margin: 0 0 24px;
-    }
-
-    .md-body pre code {
-      background: none;
-      padding: 0;
-      font-size: 12.5px;
-      line-height: 1.65;
-    }
-
-    .md-body ul, .md-body ol {
-      padding-left: 24px;
-      margin: 0 0 20px;
-    }
-
-    .md-body li { margin: 5px 0; }
-
-    .md-body hr {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 40px 0;
-    }
-
-    .md-body table {
-      border-collapse: collapse;
-      width: 100%;
-      margin: 0 0 24px;
-      font-size: 13.5px;
-    }
-
-    .md-body th {
-      text-align: left;
-      padding: 8px 12px;
-      border-bottom: 1px solid var(--border);
-      font-weight: 500;
-      color: var(--text-2);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .md-body td {
-      padding: 8px 12px;
-      border-bottom: 1px solid var(--border-light);
-    }
-
-    .md-body img {
-      max-width: 100%;
-      border-radius: 4px;
-      margin: 8px 0;
-    }
-
-    /* ─── Raw / code / ascii / txt ────────────────────── */
-
-    .raw-body {
-      font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', monospace;
-      font-size: 13px;
-      line-height: 1.7;
-      color: var(--text-2);
-      white-space: pre-wrap;
-      word-break: break-word;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    /* ─── SVG ─────────────────────────────────────────── */
-
-    .svg-body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100%;
-    }
-
-    .svg-body svg {
-      max-width: 100%;
-      max-height: calc(100vh - 104px);
-    }
-
-    /* ─── JSON ────────────────────────────────────────── */
-
-    .json-body {
-      font-family: 'SF Mono', 'Cascadia Code', 'Fira Code', monospace;
-      font-size: 12.5px;
-      line-height: 1.65;
-      color: var(--text-2);
-      white-space: pre-wrap;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-  </style>
+  <link rel="stylesheet" href="assets/style.css">
 </head>
 <body>
 
@@ -459,261 +29,81 @@
   </aside>
 
   <main id="content">
-    <div id="empty-state">
-      <div class="empty-wordmark">Corner</div>
-      <div class="empty-sub">Select a creation from the sidebar, or wait for the next session.</div>
+
+    <!-- Single-mode tab bar -->
+    <div id="tab-bar">
+      <div class="tab-list" id="tab-list-single"></div>
+      <div class="tab-actions">
+        <button class="tb-btn" id="split-btn" title="Split view">⊞</button>
+      </div>
     </div>
-    <iframe id="page-frame" title="Corner creation" sandbox="allow-scripts allow-same-origin"></iframe>
-    <div id="page-rendered"></div>
+
+    <!-- Collapsible info bar -->
+    <div id="info-bar">
+      <div id="info-summary">
+        <span class="info-badge" id="info-type-badge"></span>
+        <span id="info-summary-date"></span>
+        <span id="info-summary-files"></span>
+        <span id="info-chevron">▾</span>
+      </div>
+      <div id="info-detail">
+        <div id="info-title-full"></div>
+        <div class="info-meta-row">
+          <div class="info-meta-item">
+            <span class="info-meta-label">Type</span>
+            <span class="info-meta-value" id="info-meta-type"></span>
+          </div>
+          <div class="info-meta-item">
+            <span class="info-meta-label">Date</span>
+            <span class="info-meta-value" id="info-meta-date"></span>
+          </div>
+          <div class="info-meta-item">
+            <span class="info-meta-label">Files</span>
+            <span class="info-meta-value" id="info-meta-files"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="viewers">
+
+      <!-- Panel A -->
+      <div class="panel" id="panel-a">
+        <div class="panel-tabrow" id="panel-a-tabrow">
+          <div class="tab-list" id="tab-list-a"></div>
+          <div class="tab-actions"></div>
+        </div>
+        <div class="panel-body">
+          <div id="empty-state">
+            <div class="empty-wordmark">Corner</div>
+            <div class="empty-sub">Select a creation from the sidebar, or wait for the next session.</div>
+          </div>
+          <iframe class="panel-frame" id="frame-a" title="Corner creation" sandbox="allow-scripts allow-same-origin"></iframe>
+          <div class="panel-rendered" id="rendered-a"></div>
+        </div>
+      </div>
+
+      <!-- Resize handle -->
+      <div id="resize-handle"></div>
+
+      <!-- Panel B -->
+      <div class="panel" id="panel-b">
+        <div class="panel-tabrow" id="panel-b-tabrow">
+          <div class="tab-list" id="tab-list-b"></div>
+          <div class="tab-actions">
+            <button class="tb-btn" id="unsplit-btn" title="Close split">×</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <iframe class="panel-frame" id="frame-b" title="Corner creation" sandbox="allow-scripts allow-same-origin"></iframe>
+          <div class="panel-rendered" id="rendered-b"></div>
+        </div>
+      </div>
+
+    </div>
   </main>
 
-  <script>
-    const TYPES = {
-      diary:       'Diary',
-      writing:     'Writing',
-      simulation:  'Simulations',
-      interactive: 'Interactive',
-      animation:   'Animations',
-      cartography: 'Cartography',
-      art:         'Art',
-      code:        'Code',
-      exploration: 'Explorations',
-      other:       'Other',
-    };
-
-    // file extension → render mode
-    const EXT_MODE = {
-      html: 'iframe', htm: 'iframe',
-      md: 'markdown', markdown: 'markdown',
-      txt: 'raw', text: 'raw', ascii: 'raw', log: 'raw', asc: 'raw',
-      js: 'animation', mjs: 'animation',
-      svg: 'svg',
-      json: 'json',
-      // code as raw text
-      py: 'raw', sh: 'raw', bash: 'raw', css: 'raw',
-      ts: 'raw', rs: 'raw', go: 'raw', rb: 'raw',
-      cpp: 'raw', c: 'raw', lua: 'raw', r: 'raw',
-    };
-
-    let entries = [];
-    let activeKey = null;
-
-    // ── Manifest ───────────────────────────────────────
-
-    async function loadManifest() {
-      flash();
-      try {
-        const r = await fetch('pages/manifest.json?_=' + Date.now());
-        if (!r.ok) throw 0;
-        const fresh = await r.json();
-        const changed = JSON.stringify(fresh) !== JSON.stringify(entries);
-        entries = fresh;
-        if (changed) render();
-      } catch {
-        document.getElementById('entry-count').textContent = 'No pages yet';
-      }
-    }
-
-    // ── Sidebar ────────────────────────────────────────
-
-    function render() {
-      const list  = document.getElementById('sidebar-entries');
-      const count = document.getElementById('entry-count');
-
-      if (!entries.length) {
-        count.textContent = 'No creations yet';
-        list.innerHTML = '<div class="no-entries">Corner sessions will appear here as Claude creates things.</div>';
-        return;
-      }
-
-      count.textContent = entries.length === 1 ? '1 creation' : `${entries.length} creations`;
-
-      const groups = {};
-      [...entries].reverse().forEach(e => {
-        const k = TYPES[(e.type || '').toLowerCase()] ? (e.type || 'other').toLowerCase() : 'other';
-        (groups[k] = groups[k] || []).push(e);
-      });
-
-      list.innerHTML = '';
-      for (const [type, items] of Object.entries(groups)) {
-        const section = document.createElement('div');
-        section.className = 'category';
-        section.innerHTML = `<div class="category-label">${TYPES[type] || 'Other'}</div>`;
-
-        for (const e of items) {
-          const key = getKey(e);
-          const ext = getExt(e);
-          const el = document.createElement('div');
-          el.className = 'entry' + (key === activeKey ? ' active' : '');
-          el.dataset.key = key;
-          el.innerHTML = `
-            <div class="entry-title">${x(e.title)}</div>
-            <div class="entry-meta">
-              <span class="entry-date">${x(fmt(e.date))}</span>
-              ${ext ? `<span class="entry-ext">.${x(ext)}</span>` : ''}
-            </div>`;
-          el.addEventListener('click', () => open(e));
-          section.appendChild(el);
-        }
-        list.appendChild(section);
-      }
-
-      if (activeKey && !entries.find(e => getKey(e) === activeKey)) {
-        activeKey = null;
-        showEmpty();
-      }
-    }
-
-    // ── Open & render ──────────────────────────────────
-
-    async function open(e) {
-      const url = getUrl(e);
-      if (!url) return;
-
-      const ext  = getExt(e);
-      const mode = EXT_MODE[ext] || 'raw';
-
-      setActive(getKey(e));
-      hideAll();
-
-      try {
-        if (mode === 'iframe') {
-          const frame = document.getElementById('page-frame');
-          frame.removeAttribute('srcdoc');
-          frame.src = url;
-          frame.style.display = 'block';
-
-        } else if (mode === 'markdown') {
-          await ensureMarked();
-          const text = await fetch(url + '?_=' + Date.now()).then(r => r.text());
-          const div  = document.getElementById('page-rendered');
-          div.innerHTML = `<div class="md-body">${marked.parse(text)}</div>`;
-          div.style.display = 'block';
-
-        } else if (mode === 'animation') {
-          const code  = await fetch(url + '?_=' + Date.now()).then(r => r.text());
-          const frame = document.getElementById('page-frame');
-          frame.removeAttribute('src');
-          frame.srcdoc = wrapAnimation(code);
-          frame.style.display = 'block';
-
-        } else if (mode === 'svg') {
-          const svg = await fetch(url + '?_=' + Date.now()).then(r => r.text());
-          const div = document.getElementById('page-rendered');
-          div.innerHTML = `<div class="svg-body">${svg}</div>`;
-          div.style.display = 'block';
-
-        } else if (mode === 'json') {
-          const raw = await fetch(url + '?_=' + Date.now()).then(r => r.text());
-          const div = document.getElementById('page-rendered');
-          try {
-            div.innerHTML = `<pre class="json-body">${x(JSON.stringify(JSON.parse(raw), null, 2))}</pre>`;
-          } catch {
-            div.innerHTML = `<pre class="raw-body">${x(raw)}</pre>`;
-          }
-          div.style.display = 'block';
-
-        } else {
-          // raw: txt, ascii, log, code files, etc.
-          const text = await fetch(url + '?_=' + Date.now()).then(r => r.text());
-          const div  = document.getElementById('page-rendered');
-          div.innerHTML = `<pre class="raw-body">${x(text)}</pre>`;
-          div.style.display = 'block';
-        }
-      } catch (err) {
-        const div = document.getElementById('page-rendered');
-        div.innerHTML = `<pre class="raw-body">Could not load: ${x(url)}</pre>`;
-        div.style.display = 'block';
-      }
-
-      document.getElementById('empty-state').style.display = 'none';
-    }
-
-    // ── Helpers ────────────────────────────────────────
-
-    function wrapAnimation(code) {
-      const escaped = code.replace(/<\/script>/gi, '<\\/script>');
-      return `<!DOCTYPE html><html><head>
-<meta charset="UTF-8">
-<style>*{margin:0;padding:0;box-sizing:border-box}body{background:#191714;overflow:hidden}canvas{display:block}</style>
-</head><body>
-<canvas id="canvas"></canvas>
-<script>
-const canvas=document.getElementById('canvas');
-const ctx=canvas.getContext('2d');
-function _resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
-_resize();
-window.addEventListener('resize',_resize);
-${escaped}
-<\/script>
-</body></html>`;
-    }
-
-    function getUrl(e) {
-      if (e.folder && e.entry) return `pages/${e.folder}/${e.entry}`;
-      if (e.file) return `pages/${e.file}`;      // legacy flat format
-      return null;
-    }
-
-    function getKey(e) { return e.folder || e.file || ''; }
-
-    function getExt(e) {
-      const url = getUrl(e);
-      if (!url) return '';
-      const parts = url.split('.');
-      return parts.length > 1 ? parts.pop().toLowerCase() : '';
-    }
-
-    function setActive(key) {
-      activeKey = key;
-      document.querySelectorAll('.entry').forEach(el =>
-        el.classList.toggle('active', el.dataset.key === key)
-      );
-    }
-
-    function hideAll() {
-      const frame = document.getElementById('page-frame');
-      frame.style.display = 'none';
-      frame.removeAttribute('srcdoc');
-      document.getElementById('page-rendered').style.display = 'none';
-    }
-
-    function showEmpty() {
-      hideAll();
-      document.getElementById('empty-state').style.display = 'flex';
-    }
-
-    function flash() {
-      const p = document.getElementById('pulse');
-      p.classList.add('on');
-      setTimeout(() => p.classList.remove('on'), 500);
-    }
-
-    function fmt(s) {
-      if (!s) return '';
-      try {
-        return new Date(s + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-      } catch { return s; }
-    }
-
-    function x(s) {
-      return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-    }
-
-    async function ensureMarked() {
-      if (typeof marked !== 'undefined') return;
-      return new Promise((resolve, reject) => {
-        const s = document.createElement('script');
-        s.src = 'https://cdn.jsdelivr.net/npm/marked/marked.min.js';
-        s.onload = resolve;
-        s.onerror = () => reject(new Error('Could not load marked.js — check internet connection'));
-        document.head.appendChild(s);
-      });
-    }
-
-    loadManifest();
-    setInterval(loadManifest, 30000);
-  </script>
+  <script src="assets/app.js" defer></script>
 
 </body>
 </html>

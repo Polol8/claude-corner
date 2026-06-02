@@ -44,6 +44,12 @@ else
     echo "✓ index.html já existe (mantido)"
 fi
 
+# Copy assets (CSS + JS)
+mkdir -p "$HOME/claude-corner/assets"
+cp "$CLAUDE_PLUGIN_ROOT/templates/assets/style.css" "$HOME/claude-corner/assets/style.css"
+cp "$CLAUDE_PLUGIN_ROOT/templates/assets/app.js" "$HOME/claude-corner/assets/app.js"
+echo "✓ assets/ copiados"
+
 # Create pages/ folder and manifest
 mkdir -p "$HOME/claude-corner/pages"
 if [ ! -f "$HOME/claude-corner/pages/manifest.json" ]; then
