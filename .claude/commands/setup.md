@@ -10,7 +10,7 @@ allowed-tools: Bash, Read, Write
 
 **Your first output line MUST be:** `🏠 Corner Setup`
 
-Activate the corner plugin for this user. This registers the `Stop` hook so the corner fires automatically after every 5 responses.
+Activate the corner plugin for this user. This registers a `Stop` hook so the corner fires automatically after every N responses.
 
 ## Step 1 — Check current state
 
@@ -79,7 +79,28 @@ print('✓ settings.json de confinamento criado')
 "
 ```
 
-## Step 4 — Register the Stop hook
+## Step 4 — Ask for trigger interval
+
+Use AskUserQuestion to ask:
+
+- **Question**: "De quantas em quantas mensagens o corner deve ativar?"
+- **Header**: "Intervalo"
+- **Options**:
+  - "3 mensagens" — frequente, description: "O corner ativa a cada 3 respostas"
+  - "5 mensagens (recomendado)" — padrão, description: "Equilíbrio entre frequência e foco"
+  - "10 mensagens" — moderado, description: "Menos interrupções, sessões mais espaçadas"
+  - "20 mensagens" — raro, description: "Quase em segundo plano"
+
+Save the chosen number (3, 5, 10, or 20 — or whatever the user typed in "Other") to `~/.claude/.corner-interval`:
+
+```bash
+echo "INTERVALO_ESCOLHIDO" > "$HOME/.claude/.corner-interval"
+echo "✓ Intervalo configurado: a cada INTERVALO_ESCOLHIDO mensagens"
+```
+
+If the user picked "Other" and typed a custom value, validate it's a positive integer before saving. If invalid, default to 5.
+
+## Step 6 — Register the Stop hook
 
 Adds the corner hook to `~/.claude/settings.json` so it fires after every response.
 
@@ -103,7 +124,7 @@ print('✓ Hook Stop registrado')
 "
 ```
 
-## Step 5 — Show summary
+## Step 7 — Show summary
 
 ```
 🏠 Corner Setup — Concluído!
@@ -112,7 +133,7 @@ print('✓ Hook Stop registrado')
   Frontend:   ~/claude-corner/index.html  (abre com /corner:view)
   Páginas:    ~/claude-corner/pages/      (Claude cria HTMLs aqui)
   Confinado:  só lê/escreve dentro de ~/claude-corner/
-  Hook:       ativo — dispara a cada 5 prompts
+  Hook:       ativo — dispara a cada N mensagens (N = intervalo escolhido)
   Timeout:    5 minutos por sessão
   Prompt:     ~/claude-corner/PROMPT.md (editável)
 

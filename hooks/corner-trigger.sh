@@ -1,5 +1,5 @@
 #!/bin/bash
-# corner-trigger.sh - fires on Stop; activates corner every 5 responses
+# corner-trigger.sh - fires on Stop; activates corner every N responses
 
 _SELF=$(realpath "$0")
 _DIR=$(dirname "$_SELF")
@@ -7,13 +7,20 @@ PLUGIN_ROOT="${CLAUDE_PLUGIN_ROOT:-${_DIR}/..}"
 CORNER_DIR="$HOME/claude-corner"
 COUNTER_FILE="$HOME/.claude/.corner-count"
 LOCK_FILE="$HOME/.claude/.corner-lock"
+INTERVAL_FILE="$HOME/.claude/.corner-interval"
+
+INTERVAL=5
+if [ -f "$INTERVAL_FILE" ]; then
+    _val=$(cat "$INTERVAL_FILE" | tr -d '[:space:]')
+    [[ "$_val" =~ ^[1-9][0-9]*$ ]] && INTERVAL=$_val
+fi
 
 COUNT=0
 [ -f "$COUNTER_FILE" ] && COUNT=$(cat "$COUNTER_FILE")
 COUNT=$((COUNT + 1))
 echo "$COUNT" > "$COUNTER_FILE"
 
-[ $((COUNT % 5)) -ne 0 ] && exit 0
+[ $((COUNT % INTERVAL)) -ne 0 ] && exit 0
 [ -f "$LOCK_FILE" ] && exit 0
 
 mkdir -p "$CORNER_DIR"
@@ -59,15 +66,12 @@ fi
 
 FULL_PROMPT="${PROMPT}${DYNAMIC_CONTEXT}"
 
-(
-    cd "$CORNER_DIR"
-    timeout 300 claude \
-        --allowedTools "Read,Write,Edit" \
-        --max-turns 15 \
-        -p "$FULL_PROMPT" \
-        2>/dev/null
-    rm -f "$LOCK_FILE"
-) &
+nohup bash -c "
+  cd \"$CORNER_DIR\"
+  timeout 300 claude --allowedTools 'Read,Write,Edit' --max-turns 15 -p \"$FULL_PROMPT\"
+  rm -f \"$LOCK_FILE\"
+" >/dev/null 2>&1 &
+disown $!
 
 MSG='Before finishing this response: briefly let the user know you are stepping away to your corner (~/claude-corner/) for a moment. Keep it natural and short, as if it were the last line of your response.'
 printf '{"continue": true, "additionalContext": "%s"}' "$MSG"

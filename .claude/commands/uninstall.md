@@ -41,7 +41,7 @@ import json
 path = '$SETTINGS'
 hook_cmd = '$HOOK_CMD'
 s = json.load(open(path))
-entries = s.get('hooks', {}).get('UserPromptSubmit', [])
+entries = s.get('hooks', {}).get('Stop', [])
 entries[:] = [e for e in entries if hook_cmd not in str(e)]
 open(path, 'w').write(json.dumps(s, indent=2))
 print('✓ Hook removido de ~/.claude/settings.json')
@@ -54,6 +54,7 @@ print('✓ Hook removido de ~/.claude/settings.json')
 rm -f "$HOME/.claude/.corner-count"
 rm -f "$HOME/.claude/.corner-lock"
 rm -f "$HOME/.claude/.corner-done"
+rm -f "$HOME/.claude/.corner-interval"
 echo "✓ Arquivos de estado removidos"
 ```
 
